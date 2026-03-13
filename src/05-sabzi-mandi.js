@@ -30,5 +30,35 @@
  *   // => { items: [], totalBill: 0 }
  */
 export function sabziMandiBill(shoppingList, priceList) {
-  // Your code here
+  if (!Array.isArray(shoppingList) || shoppingList.length === 0) {
+    return { items: [], totalBill: 0 };
+  }
+
+  const items = [];
+  let totalBill = 0;
+
+  for (const item of shoppingList) {
+    if (
+      !item ||
+      typeof item.name !== "string" ||
+      typeof item.qty !== "number" ||
+      item.qty <= 0
+    ) {
+      continue;
+    }
+
+    const price =
+      priceList && Object.prototype.hasOwnProperty.call(priceList, item.name)
+        ? priceList[item.name]
+        : undefined;
+
+    if (typeof price !== "number") continue;
+    if (price > 80) continue;
+
+    const cost = price * item.qty;
+    items.push({ name: item.name, qty: item.qty, cost });
+    totalBill += cost;
+  }
+
+  return { items, totalBill };
 }
